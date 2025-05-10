@@ -209,21 +209,8 @@ export default function GuardScannerPage() {
       }
 
       const data = await response.json();
-      setApiResponse({
-        original_prompt: prompt,
-        final_sanitized_prompt: data.sanitized_prompt || prompt,
-        overall_is_valid: data.is_valid,
-        applied_scanners_results: [
-          {
-            scanner_name: "anonymize",
-            input_prompt: prompt,
-            sanitized_prompt: data.sanitized_prompt || prompt,
-            is_valid: data.is_valid,
-            risk_score: data.risk_score || 0,
-            details: data.details || {},
-          },
-        ],
-      });
+      // Directly use the received API response data without modifying it
+      setApiResponse(data);
     } catch (e: unknown) {
       console.error("Error scanning prompt:", e);
       setError(e instanceof Error ? e.message : "Failed to fetch from API");
@@ -481,7 +468,8 @@ export default function GuardScannerPage() {
               <h3 className="text-xl font-semibold text-gray-200 mb-3 pt-3 border-t border-gray-700">
                 Individual Scanner Details:
               </h3>
-              {apiResponse.applied_scanners_results.length > 0 ? (
+              {apiResponse.applied_scanners_results &&
+              apiResponse.applied_scanners_results.length > 0 ? (
                 <div className="space-y-4">
                   {apiResponse.applied_scanners_results.map((result, index) => {
                     const scannerInfo = ALL_SCANNERS.find(
