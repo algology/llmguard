@@ -1,290 +1,161 @@
-import { FlickeringGrid } from "@/components/magicui/flickering-grid";
-// Import shadcn/ui components (Button, Card, Accordion, etc.)
+import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
+import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@/components/ui/accordion";
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export default function Home() {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <div className="relative min-h-screen bg-background font-sans">
-      {/* Flickering grid background */}
-      <div className="absolute inset-0 -z-10">
-        <FlickeringGrid
-          squareSize={4}
-          gridGap={6}
-          flickerChance={0.3}
-          color="rgb(147, 51, 234)"
-          maxOpacity={0.1}
-          className="w-full h-full"
+    <div className="relative min-h-screen bg-neutral-950 font-sans text-neutral-50 flex flex-col overflow-x-hidden">
+      {/* Animated Grid Pattern - Applying demo's visual className and props */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <AnimatedGridPattern
+          numSquares={15}
+          maxOpacity={0.01}
+          duration={3}
+          repeatDelay={1}
+          className={cn(
+            "[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]",
+            "inset-x-0 inset-y-[-70%] h-[200%] skew-y-12 opacity-50"
+          )}
         />
       </div>
 
-      {/* NavBar */}
-      <nav className="flex justify-between items-center px-8 py-6 max-w-7xl mx-auto">
-        <div className="font-bold text-xl tracking-tight">YourApp</div>
-        <ul className="hidden md:flex gap-8 text-sm text-muted-foreground">
-          <li>
-            <a href="#features" className="hover:text-primary">
-              Features
-            </a>
-          </li>
-          <li>
-            <a href="#how" className="hover:text-primary">
-              How It Works
-            </a>
-          </li>
-          <li>
-            <a href="#choose" className="hover:text-primary">
-              Why Choose Us
-            </a>
-          </li>
-          <li>
-            <a href="#reviews" className="hover:text-primary">
-              Reviews
-            </a>
-          </li>
-          <li>
-            <a href="#faq" className="hover:text-primary">
-              FAQs
-            </a>
-          </li>
-        </ul>
-        <Button className="hidden md:inline-block">Get Started</Button>
-      </nav>
+      {/* --- End AnimatedGridPattern --- */}
 
-      {/* Hero Section */}
-      <section className="flex flex-col md:flex-row items-center justify-between gap-12 max-w-7xl mx-auto px-8 py-16">
-        <div className="flex-1 space-y-6">
-          <div className="inline-block bg-muted px-3 py-1 rounded-full text-xs font-medium mb-2">
-            Achievement &bull; Rated Hot App of 2025
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">
-            High Converting Heading Comes Here
-          </h1>
-          <p className="text-lg text-muted-foreground mb-6">
-            Use a clear headline, value prop, and app store buttons—give them a
-            reason to scroll or download right away.
-          </p>
-          <div className="flex gap-4 mb-2">
-            <Button size="lg">Download App</Button>
-            <Button size="lg" variant="outline">
-              Download App
+      <nav className="sticky top-0 z-50 bg-neutral-950/70 backdrop-blur-lg border-b border-neutral-800/50">
+        <div className="flex justify-between items-center px-6 md:px-10 py-4 max-w-6xl mx-auto">
+          <Link
+            href="/"
+            className="font-bold text-2xl tracking-tight text-neutral-50 hover:text-primary transition-colors"
+          >
+            Safe.ai
+          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              href="#features"
+              className="text-sm text-neutral-400 hover:text-primary transition-colors hidden sm:inline"
+            >
+              Features
+            </Link>
+            <Button
+              asChild
+              size="sm"
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+            >
+              <Link href="/guard-ui">Open Scanner</Link>
             </Button>
           </div>
-          <div className="text-sm text-muted-foreground">200K+ Downloads</div>
         </div>
-        <div className="flex-1 flex items-center justify-center">
-          <div className="w-[320px] h-[320px] bg-muted rounded-2xl flex items-center justify-center text-2xl text-muted-foreground">
-            [App Preview]
+      </nav>
+
+      {/* Hero Section - Must be above grid */}
+      <section className="relative z-10 flex-grow flex flex-col items-center justify-center text-center px-4 py-24 md:py-36">
+        <div className="flex flex-col items-center">
+          <div
+            className={cn(
+              "group rounded-full border border-white/10 bg-neutral-900/80 text-base text-neutral-300 transition-all ease-in hover:cursor-pointer hover:bg-neutral-800/80 mb-8"
+            )}
+          >
+            <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1.5 transition ease-out hover:text-neutral-100 hover:duration-300 text-white">
+              <span>✨ Meet Safe.ai Guard</span>
+            </AnimatedShinyText>
           </div>
+
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tighter mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400">
+            Simplify AI Security
+          </h1>
+          <p className="max-w-xl text-lg text-neutral-300 mb-10">
+            Enterprise-grade Data Loss Prevention for ChatGPT and other public
+            LLMs. Deploy in minutes via browser extension or network proxy.
+          </p>
+          <Button
+            asChild
+            size="lg"
+            className="text-lg px-8 py-6 bg-white hover:bg-white/90 text-black shadow-lg hover:shadow-white/50 transition-shadow"
+          >
+            <Link href="/guard-ui">Try Safe.ai Guard</Link>
+          </Button>
         </div>
       </section>
 
-      {/* Logos/Partners Bar */}
-      <section className="max-w-5xl mx-auto px-8 py-8 flex flex-wrap items-center justify-center gap-8 border-b border-muted">
-        <span className="text-muted-foreground text-xs">
-          WE ARE PARTNERED WITH MORE THAN 50+ COMPANIES AROUND THE GLOBE.
-        </span>
-        <div className="flex gap-8 flex-wrap items-center justify-center">
-          <div className="w-24 h-8 bg-muted rounded" />
-          <div className="w-20 h-8 bg-muted rounded" />
-          <div className="w-16 h-8 bg-muted rounded" />
-          <div className="w-24 h-8 bg-muted rounded" />
-          <div className="w-20 h-8 bg-muted rounded" />
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="max-w-7xl mx-auto px-8 py-20">
-        <h2 className="text-3xl font-bold mb-10 text-center">
-          Features Section
+      {/* Features Section - Must be above grid */}
+      <section
+        id="features"
+        className="relative z-10 w-full max-w-5xl mx-auto px-6 py-16 md:py-24"
+      >
+        <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center tracking-tight text-neutral-100">
+          Enterprise-Grade Protection
         </h2>
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="font-semibold text-xl mb-2">
-                Highlighted Feature 1
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                Main feature card with supporting visuals and copy to show how
-                your app solves real problems.
-              </p>
-              <div className="w-full h-32 bg-muted rounded" />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="font-semibold text-xl mb-2">
-                Highlighted Feature 2
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                Another feature card with a different focus or visual.
-              </p>
-              <div className="w-full h-32 bg-muted rounded" />
-            </CardContent>
-          </Card>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="font-semibold text-lg mb-2">
-                Highlighted Feature 3
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                Quickly show how your app solves real problems.
-              </p>
-              <div className="w-full h-20 bg-muted rounded" />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="font-semibold text-lg mb-2">
-                Highlighted Feature 4
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                Another supporting feature.
-              </p>
-              <div className="w-full h-20 bg-muted rounded" />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6">
-              <h3 className="font-semibold text-lg mb-2">
-                Highlighted Feature 5
-              </h3>
-              <p className="text-muted-foreground mb-4">
-                And another one for good measure.
-              </p>
-              <div className="w-full h-20 bg-muted rounded" />
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Why Choose Us Section */}
-      <section id="choose" className="max-w-7xl mx-auto px-8 py-20">
-        <h2 className="text-3xl font-bold mb-10 text-center">Why Choose Us</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          <Card>
-            <CardContent className="p-6 flex flex-col items-center">
-              <div className="w-12 h-12 bg-muted rounded-full mb-4" />
-              <h4 className="font-semibold mb-2">Title</h4>
-              <p className="text-muted-foreground text-center">
-                Brief benefit-led text to explain why users should pick your
-                app.
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6 flex flex-col items-center">
-              <div className="w-12 h-12 bg-muted rounded-full mb-4" />
-              <h4 className="font-semibold mb-2">Title</h4>
-              <p className="text-muted-foreground text-center">
-                Another reason to choose your app over others.
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-6 flex flex-col items-center">
-              <div className="w-12 h-12 bg-muted rounded-full mb-4" />
-              <h4 className="font-semibold mb-2">Title</h4>
-              <p className="text-muted-foreground text-center">
-                A third compelling reason for your value prop.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Review Section */}
-      <section id="reviews" className="max-w-7xl mx-auto px-8 py-20">
-        <h2 className="text-3xl font-bold mb-10 text-center">
-          What Our Users Say
-        </h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {[1, 2, 3].map((i) => (
-            <Card key={i}>
-              <CardContent className="p-6">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-8 h-8 bg-muted rounded-full" />
-                  <div>
-                    <div className="font-semibold">Name</div>
-                    <div className="text-xs text-muted-foreground">Country</div>
-                  </div>
-                </div>
-                <div className="mb-2">★★★★★</div>
-                <p className="text-muted-foreground">
-                  Testimonial with a short blurb to build authenticity and
-                  trust.
-                </p>
+        <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+          {[
+            {
+              title: "Real-time DLP",
+              description:
+                "Instant detection and redaction of sensitive data before it reaches public LLMs.",
+            },
+            {
+              title: "AI Pattern Detection",
+              description:
+                "Advanced machine learning identifies potential data exfiltration attempts.",
+            },
+            {
+              title: "Seamless Deployment",
+              description:
+                "Browser extension or network proxy options for quick enterprise-wide rollout.",
+            },
+          ].map((feature) => (
+            <Card
+              key={feature.title}
+              className="bg-black/30 border-neutral-700/60 backdrop-blur-md shadow-xl hover:border-primary/60 transition-all duration-300"
+            >
+              <CardHeader>
+                <CardTitle className="text-xl text-neutral-100">
+                  {feature.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-neutral-300">
+                  {feature.description}
+                </CardDescription>
               </CardContent>
             </Card>
           ))}
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section id="faq" className="max-w-4xl mx-auto px-8 py-20">
-        <h2 className="text-3xl font-bold mb-10 text-center">
-          Frequently Asked Questions
+      {/* Final CTA Section - Must be above grid */}
+      <section className="relative z-10 w-full max-w-3xl mx-auto px-6 py-16 md:py-24 text-center">
+        <h2 className="text-3xl md:text-4xl font-bold mb-6 tracking-tight text-neutral-100">
+          See It In Action
         </h2>
-        <Accordion type="single" collapsible className="w-full">
-          {[1, 2, 3, 4].map((i) => (
-            <AccordionItem value={`item-${i}`} key={i}>
-              <AccordionTrigger>Question {i}</AccordionTrigger>
-              <AccordionContent>
-                Answer to question {i} goes here. Use this space to address
-                common concerns.
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <p className="text-neutral-300 mb-8 max-w-lg mx-auto">
+          Experience how Safe.ai prevents sensitive data leaks to ChatGPT and
+          other public LLMs. Try our interactive demo with your own test data.
+        </p>
+        <Button
+          asChild
+          size="lg"
+          variant="outline"
+          className="text-lg px-8 py-6 border-primary text-primary hover:bg-primary hover:text-primary-foreground hover:shadow-primary/50 transition-shadow shadow-md"
+        >
+          <Link href="/guard-ui">Launch Demo</Link>
+        </Button>
       </section>
 
-      {/* CTA Section */}
-      <section className="max-w-4xl mx-auto px-8 py-20 flex flex-col md:flex-row items-center gap-8">
-        <div className="flex-1 space-y-4">
-          <h2 className="text-2xl font-bold mb-2">Ready to get started?</h2>
-          <p className="text-muted-foreground mb-4">
-            Reinforce the download offer, repeat your app's value, and include
-            the app buttons again for one final push.
-          </p>
-          <div className="flex gap-4">
-            <Button size="lg">Download App</Button>
-            <Button size="lg" variant="outline">
-              Download App
-            </Button>
-          </div>
-        </div>
-        <div className="flex-1 flex items-center justify-center">
-          <div className="w-[220px] h-[220px] bg-muted rounded-2xl flex items-center justify-center text-lg text-muted-foreground">
-            [Visual]
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-muted py-8 text-center text-muted-foreground text-sm">
-        <div className="mb-2">© 2025 Company Name. All Rights Reserved.</div>
-        <div className="flex gap-4 justify-center">
-          <a href="#" className="hover:underline">
-            LinkedIn
-          </a>
-          <a href="#" className="hover:underline">
-            Instagram
-          </a>
-          <a href="#" className="hover:underline">
-            Facebook
-          </a>
-          <a href="#" className="hover:underline">
-            Twitter
-          </a>
-        </div>
+      {/* Footer - Must be above grid */}
+      <footer className="relative z-10 py-8 text-center text-neutral-500 text-sm border-t border-neutral-800/50">
+        © {currentYear} Safe.ai. All rights reserved.
       </footer>
     </div>
   );
