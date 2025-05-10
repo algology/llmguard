@@ -26,6 +26,11 @@ interface ScanResponse {
   applied_scanners_results: ScannerResult[];
 }
 
+interface ToxicityScoreItem {
+  label: string;
+  score: number;
+}
+
 export async function POST(request: Request) {
   try {
     // Parse the request body
@@ -121,7 +126,7 @@ export async function POST(request: Request) {
           ) {
             scannerResult.details.toxicity_scores = apiData.detection.toxicity;
             scannerResult.is_valid = !apiData.detection.toxicity.some(
-              (item: any) => item.score > 0.7
+              (item: ToxicityScoreItem) => item.score > 0.7 // Use the defined type here
             );
           } else if (
             scannerName === "bansubstrings" &&
@@ -163,9 +168,10 @@ export async function POST(request: Request) {
     // Simple mock scanning logic
     const prompt = body.prompt;
     let sanitizedPrompt = prompt;
-    let isValid = true;
-    let riskScore = 0;
-    const details: Record<string, unknown> = {};
+    // These variables are not used, but we declare them to satisfy the structure
+    // const isValid = true; // unused
+    // const riskScore = 0; // unused
+    // const details: Record<string, unknown> = {}; // unused
 
     // Simple check for PII (emails, phone numbers, credit cards, SSNs)
     const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
@@ -236,9 +242,9 @@ export async function POST(request: Request) {
     }
 
     // Set toxicity validity and details
-    let toxicityValid = !hasToxicity;
-    let toxicityRiskScore = hasToxicity ? 0.9 : 0;
-    let toxicityDetails: Record<string, unknown> = hasToxicity
+    const toxicityValid = !hasToxicity;
+    const toxicityRiskScore = hasToxicity ? 0.9 : 0;
+    const toxicityDetails: Record<string, unknown> = hasToxicity
       ? {
           toxicity_detected: true,
           words_found: toxicWords.filter((word) =>
@@ -248,9 +254,9 @@ export async function POST(request: Request) {
       : {};
 
     // Set secrets validity and details
-    let secretsValid = !hasSecrets;
-    let secretsRiskScore = hasSecrets ? 0.95 : 0;
-    let secretsDetails: Record<string, unknown> = hasSecrets
+    const secretsValid = !hasSecrets;
+    const secretsRiskScore = hasSecrets ? 0.95 : 0;
+    const secretsDetails: Record<string, unknown> = hasSecrets
       ? {
           secrets_detected: true,
           potential_matches: potentialSecrets.filter((word) =>
