@@ -80,7 +80,7 @@ export async function POST(request: Request) {
     let sanitizedPrompt = prompt;
     let isValid = true;
     let riskScore = 0.1;
-    let details: Record<string, unknown> = {};
+    const details: Record<string, unknown> = {};
 
     // Simple check for PII (emails, phone numbers, credit cards)
     const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
