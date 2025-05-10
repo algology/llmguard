@@ -236,10 +236,10 @@ export default function GuardScannerPage() {
     <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-4 md:p-8">
       <header className="w-full max-w-4xl mb-8 text-center">
         <h1 className="text-4xl md:text-5xl font-bold text-purple-400">
-          LLM Guard Interface
+          Safe.ai Interface
         </h1>
         <p className="text-gray-400 mt-2">
-          Select & configure scanners, then enter a prompt to analyze.
+          Select & configure scanners, then enter a prompt to test.
         </p>
       </header>
 
