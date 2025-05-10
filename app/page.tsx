@@ -73,7 +73,7 @@ export default function Home() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tighter mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400">
-            Simplify AI Security
+            Simplify Enterprise AI Security
           </h1>
           <p className="max-w-xl text-lg text-neutral-300 mb-10">
             Enterprise-grade Data Loss Prevention for ChatGPT and other public
