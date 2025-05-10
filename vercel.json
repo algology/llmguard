@@ -1,0 +1,13 @@
+{
+  "buildCommand": "pip install -r app/api/scan/requirements.txt && npm run build",
+  "devCommand": "next dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "functions": {
+    "app/api/**/*.py": {
+      "runtime": "python3.9",
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  }
+}

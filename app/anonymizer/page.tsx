@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { useState } from "react";
 
 // Updated ScannerName to match backend Pydantic model
 type ScannerName =
@@ -17,7 +17,7 @@ interface SingleScannerResult {
   sanitized_prompt: string;
   is_valid: boolean;
   risk_score: number;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
 }
 
 interface ComprehensiveScanResponse {
@@ -73,7 +73,7 @@ export default function GuardScannerPage() {
     setApiResponse(null);
 
     try {
-      const response = await fetch("http://localhost:8000/scan/comprehensive", {
+      const response = await fetch("/api/scan", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -94,9 +94,9 @@ export default function GuardScannerPage() {
 
       const data: ComprehensiveScanResponse = await response.json();
       setApiResponse(data);
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.error("Error scanning prompt:", e);
-      setError(e.message || "Failed to fetch from API");
+      setError(e instanceof Error ? e.message : "Failed to fetch from API");
     } finally {
       setIsLoading(false);
     }

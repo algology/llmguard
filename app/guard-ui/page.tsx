@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ChangeEvent, KeyboardEvent } from "react";
+import { useState, KeyboardEvent } from "react";
 
 // Updated ScannerName to match backend Pydantic model
 type ScannerName =
@@ -17,7 +17,7 @@ interface SingleScannerResult {
   sanitized_prompt: string;
   is_valid: boolean;
   risk_score: number;
-  details: Record<string, any>;
+  details: Record<string, unknown>;
 }
 
 interface ComprehensiveScanResponse {
@@ -25,6 +25,13 @@ interface ComprehensiveScanResponse {
   final_sanitized_prompt: string;
   overall_is_valid: boolean;
   applied_scanners_results: SingleScannerResult[];
+}
+
+interface ScanRequestBody {
+  prompt: string;
+  scanners: ScannerName[];
+  banned_substrings_list?: string[];
+  regex_patterns_list?: string[];
 }
 
 const ALL_SCANNERS: {
@@ -166,7 +173,7 @@ export default function GuardScannerPage() {
     setError(null);
     setApiResponse(null);
 
-    const requestBody: any = {
+    const requestBody: ScanRequestBody = {
       prompt,
       scanners: selectedScanners,
     };
@@ -182,7 +189,7 @@ export default function GuardScannerPage() {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/scan/comprehensive", {
+      const response = await fetch("/api/scan", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -193,52 +200,36 @@ export default function GuardScannerPage() {
       if (!response.ok) {
         const errorData = await response
           .json()
-          .catch(() => ({ detail: "Unknown error occurred" }));
+          .catch(() => ({ error: "Unknown error occurred" }));
         throw new Error(
           `API Error (${response.status}): ${
-            errorData.detail || response.statusText
+            errorData.error || response.statusText
           }`
         );
       }
 
-      const data: ComprehensiveScanResponse = await response.json();
-      setApiResponse(data);
-    } catch (e: any) {
+      const data = await response.json();
+      setApiResponse({
+        original_prompt: prompt,
+        final_sanitized_prompt: data.sanitized_prompt || prompt,
+        overall_is_valid: data.is_valid,
+        applied_scanners_results: [
+          {
+            scanner_name: "anonymize",
+            input_prompt: prompt,
+            sanitized_prompt: data.sanitized_prompt || prompt,
+            is_valid: data.is_valid,
+            risk_score: data.risk_score || 0,
+            details: data.details || {},
+          },
+        ],
+      });
+    } catch (e: unknown) {
       console.error("Error scanning prompt:", e);
-      setError(e.message || "Failed to fetch from API");
+      setError(e instanceof Error ? e.message : "Failed to fetch from API");
     } finally {
       setIsLoading(false);
     }
-  };
-
-  // Render function for scanner details (especially if populated from backend)
-  const renderScannerDetails = (details: Record<string, any>) => {
-    if (Object.keys(details).length === 0)
-      return (
-        <p className="text-xs text-gray-400 italic">
-          No specific details provided by this scanner.
-        </p>
-      );
-
-    // Example: if details.detections is an array of strings
-    if (
-      Array.isArray(details.detections) &&
-      details.detections.every((item: any) => typeof item === "string")
-    ) {
-      return (
-        <ul className="list-disc list-inside text-xs text-gray-300 space-y-1 mt-1">
-          {details.detections.map((item: string, idx: number) => (
-            <li key={idx}>{item}</li>
-          ))}
-        </ul>
-      );
-    }
-    // Default: render as JSON
-    return (
-      <pre className="text-gray-300 whitespace-pre-wrap break-words bg-gray-600 p-2 rounded mt-1 text-xs">
-        {JSON.stringify(details, null, 2)}
-      </pre>
-    );
   };
 
   return (
